@@ -7,6 +7,9 @@ import LogoutIcon from "@mui/icons-material/Logout"
 import MoreVerticalIcon from "@mui/icons-material/MoreVert"
 import SearchIcon from "@mui/icons-material/Search"
 import Button from "@mui/material/Button"
+import { signOut } from 'firebase/auth'
+import { auth, db } from '../config/firebase'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 const StyledContainer = styled.div`
   height: 100vh;
@@ -56,6 +59,16 @@ const StyledUserAvatar = styled(Avatar)`
 
 
 const Sidebar = () => {
+  const [loggedInUser, _loading, _error] = useAuthState(auth)
+
+  const logout = async () => {
+		try {
+			await signOut(auth)
+		} catch (error) {
+			console.log('ERROR LOGGING OUT', error)
+		}
+	}
+
   return (
     <StyledContainer>
       <StyledHeader>
@@ -74,7 +87,7 @@ const Sidebar = () => {
             <MoreVerticalIcon />
           </IconButton>
           <IconButton>
-            <LogoutIcon />
+            <LogoutIcon onClick={logout} />
           </IconButton>
         </div>
       </StyledHeader>
